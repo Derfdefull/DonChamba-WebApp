@@ -1,0 +1,182 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Web_App_DonChamba.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width =device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no" />
+    <title><%: Page.Title %> - Don Chamba</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/5fffe9cc75.js" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
+
+  
+
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+        <div class="row ">
+            <div class="col-2 col-xl-3 col-xxl-2 d-none d-xl-block" style="min-height: 100vh; max-height: 100vh;">
+                <div class="p-3" style="min-height: 100%; position: relative;">
+
+                    <div class="text-center mb-5">
+                        <img src="Assets/IMG/logodonchamba.jpg" class="text-center" width="150px">
+                        <p class="m-0">¡Bienvenido!</p>
+                        <small>Denilson Chavez </small>
+                        <hr />
+                    </div>
+
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link p-2"
+                                href="Default.aspx">
+                                <i class="fas fa-home" aria-hidden="true"></i> Inicio</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link p-2 rounded"
+                                href="Companies.aspx">
+                                <i class="fa-solid fa-building"></i> Sucursales </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link p-2 rounded"
+                                href="Users.aspx">
+                                <i class="fa-solid fa-person"></i> Vendedores</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link p-2 rounded"
+                                href="Categories.aspx">
+                                <i class="fas fa-file-invoice" aria-hidden="true"></i> Categorias </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link p-2 rounded"
+                                href="Products.aspx">
+                                <i class="fa-solid fa-box"></i> Productos </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link p-2 rounded"
+                                href="Orders.aspx">
+                                <i class="fa-solid fa-truck"></i> Pedidos </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="text-center" style="position: absolute; bottom: 5px;">
+                        <asp:Button runat="server"
+                            ID="btnLogout"
+                            CssClass="btn btn-outline-primary mb-3"
+                            Text="Cerrar Sesion" OnClick="btnLogout_Click" />
+                        <p class="text-center c-fig"
+                            style="font-size: 12px;">
+                            COPYRIGHT ALL RIGHTS RESERVED 2022 @ DonChamba 
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-xl-3 col-xxl-2 d-block d-xl-none">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: relative;">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">
+                            <img src="Assets/IMG/logodonchamba.jpg" class="text-center rounded-circle" width="50px">
+                            Don Chamba</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link p-2"
+                                        href="Default.aspx">
+                                        <i class="fas fa-home" aria-hidden="true"></i> Inicio</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link p-2 rounded"
+                                        href="Companies.aspx">
+                                        <i class="fa-solid fa-building"></i> Sucursales </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link p-2 rounded"
+                                        href="Users.aspx">
+                                        <i class="fa-solid fa-person"></i> Vendedores</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link p-2 rounded"
+                                        href="Categories.aspx">
+                                        <i class="fas fa-file-invoice" aria-hidden="true"></i> Categorias </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link p-2 rounded"
+                                        href="Products.aspx">
+                                        <i class="fa-solid fa-box"></i> Productos </a>
+                                </li>
+                            </ul>
+                            <div class="text-center">
+                                <asp:Button runat="server"
+                                    ID="Button1"
+                                    CssClass="btn btn-outline-primary mb-3"
+                                    Text="Cerrar Sesión" OnClick="btnLogout_Click" />
+                                <p class="text-center c-fig"
+                                    style="font-size: 12px;">
+                                    COPYRIGHT ALL RIGHTS RESERVED 2022 @ DonChamba 
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="col-12 col-xl-10 login-background" style="min-height: 100vh; max-height: 100vh; overflow: scroll">
+                <div class="container body-content pt-5 pb-5">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                    </asp:ContentPlaceHolder>
+
+                </div>
+
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
+ 
+    </form>
+</body>
+</html>
