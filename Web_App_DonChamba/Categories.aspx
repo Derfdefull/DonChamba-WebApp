@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <table class=" border shadow mt-3 display" id="table_id" >
+    <table class="table table-striped dt-responsive nowrap border shadow mt-3 display" id="table_id"   >
         <thead>
             <tr>
                 <th>Acciones</th> 
@@ -199,8 +199,8 @@
                                 table.ajax.reload();
                             } else {
                                 Swal.fire(
-                                    'No se puede eliminar este registro!',
-                                    'La categoria contiene productos...',
+                                    'No se puede eliminar este registro',
+                                    'La categoria contiene dependencias...',
                                     'warning'
                                 );
                             }

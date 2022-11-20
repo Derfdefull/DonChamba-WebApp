@@ -1,9 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Orders.aspx.cs" Inherits="Web_App_DonChamba.Orders" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-
-   
-
     <!-- Modal -->
     <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -58,7 +55,7 @@
 
 
     <div class=" table-responsive">
-        <table class="bg-snow border shadow mt-3 overflow-auto display" id="table_id">
+        <table class="table table-striped dt-responsive nowrap bg-snow border shadow mt-3 overflow-auto display" id="table_id">
             <thead>
                 <tr>
                     <th>Acciones</th>
@@ -78,7 +75,6 @@
 
 
     <script>
-
         var Users;
 
         function loadUsers() {
@@ -178,7 +174,7 @@
 
         function Details(model) {
             $('#ModalOrderDetailsModalLabel').empty();
-            $('#ModalOrderDetailsModalLabel').append('Detalles de Orden');
+            $('#ModalOrderDetailsModalLabel').append('Detalles de Orden - #' + model.PkIdOrden);
             $('#ModalOrderDetails').modal('show');
             var obj = {};
             obj.PkIdOrden = model.PkIdOrden;
@@ -192,7 +188,8 @@
                     orderdetails = msg.d['result'];
                     console.log(orderdetails);
                     $('#orderdetails').empty();
-                     
+                    $('#orderdetails').append('Total: $' + parseFloat(model.Total).toFixed(2) + ' <br> ');
+                    $('#orderdetails').append('Comisi&oacuten para vendedor: $' + parseFloat(model.Total * 0.02).toFixed(2)  + '<hr>');
                     for (k = 0; k < orderdetails.length; k++) {
                         var productsname, productdescription;
                         $.each(products, function (i, v) {
@@ -203,16 +200,17 @@
                         });
                         $('#orderdetails').append('Producto: ' + productsname + '<br>');
                         $('#orderdetails').append('Descripci&oacuten: ' + productdescription + '<br>');
-                        $('#orderdetails').append('Cantidad: ' + orderdetails[k].Cantidad + '<br>');
-                        $('#orderdetails').append('Subtotal: ' + '$' + parseFloat(orderdetails[k].Subtotal * 0.02).toFixed(2)   + '<br>');
+                        $('#orderdetails').append('Cantidad: ' + orderdetails[k].Cantidad + ' _ <small class="muted"> Precio Unidad (Caja): $' + orderdetails[k].Preciounidad + '</small> <br>');
+                        $('#orderdetails').append('Subtotal: ' + '$' + parseFloat(orderdetails[k].Subtotal).toFixed(2) + '<br>');
                         $('#orderdetails').append('<hr>');
                     }
+                     
                 }
             });
         }
  
         function SaveEdit(model) {
-            if ($('.selectpicker').val().trim().length > 0  ) {
+            if ($('.selectpicker').val().trim().length > 0 ) {
                 var obj = {}; 
                 obj.PkIdOrden = model.PkIdOrden;
                 obj.FkIdUsuario = model.FkIdUsuario;

@@ -49,7 +49,7 @@
    
 
     <div class=" table-responsive">
-        <table class="bg-snow border shadow mt-3 overflow-auto display" id="table_id"  >
+        <table class="table table-striped dt-responsive nowrap bg-snow border shadow mt-3 overflow-auto display" id="table_id"  >
             <thead>
                 <tr>
                     <th>Acciones</th>
@@ -244,8 +244,8 @@
                                   table.ajax.reload();
                               } else {
                                   Swal.fire(
-                                      'No se puede eliminar este registro!',
-                                      'La sucursal contiene vendedores...',
+                                      'No se puede eliminar este registro',
+                                      'La sucursal contiene dependencias...',
                                       'warning'
                                   );
                               }

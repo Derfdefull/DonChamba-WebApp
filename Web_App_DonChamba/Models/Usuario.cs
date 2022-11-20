@@ -14,5 +14,6 @@ namespace Web_App_DonChamba.Models
         public string Apellidos { get; set; } 
         public string Celular { get; set; }
         public string Telefono { get; set; }
+        public int Nivel { get; set; }
     }
 }

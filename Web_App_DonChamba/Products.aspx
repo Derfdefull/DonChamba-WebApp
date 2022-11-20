@@ -59,7 +59,7 @@
                 
                     <div class="form-group">
                         <label for="txtUName">Precio*: </label>
-                        <input class="form-control mw-100" name="txtPPrice" id="txtPPrice" type="text" />
+                        <input class="form-control mw-100 number" name="txtPPrice" id="txtPPrice" type="text" />
                         <small>Introduce precio del producto</small>
                     
                 </div>
@@ -73,11 +73,12 @@
         </div>
     </div>
 
-    <div class=" table-responsive text-center">
-        <table class="bg-snow border shadow mt-3 overflow-auto display" id="table_id"  >
+    <div class="">
+        <table class="table table-striped dt-responsive nowrape bg-snow shadow border mt-3 overflow-auto" id="table_id"  >
             <thead>
                 <tr>
                     <th>Acciones</th>
+                    <th>Estado</th>
                     <th>Categoria</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
@@ -85,17 +86,18 @@
                     <th>Precio</th>
                 </tr>
             </thead>
-            <tbody>
-                  
+            <tbody> 
             </tbody>
         </table>
     </div>
    
 
    
-    <script>
+    <script> 
+
         var fileuploader;
         var imgmodifed = false;
+
         function readURL() { 
             if (fileuploader.files && fileuploader.files[0]) {
                 var reader = new FileReader();
@@ -116,7 +118,7 @@
 
         function loadURLToInputFiled(url) {
             getImgURL(url, (imgBlob) => { 
-                let fileName = 'productimg.jpg'
+                let fileName = 'productimg.jpeg'
                 let file = new File([imgBlob], fileName, { type: "image/jpeg", lastModified: new Date().getTime() }, 'utf-8');
                 let container = new DataTransfer();
                 container.items.add(file);
@@ -159,6 +161,7 @@
 
         var table;
         $(document).ready(function () {
+
             loadCategories();
 
             table = $('#table_id').DataTable({
@@ -176,6 +179,15 @@
                         data: 'PkIdProducto', render: function (data, type, row, meta) {
                             return "<button type='button' class='btn btn-primary m-1' onclick='Edit(" + JSON.stringify(row) + ")'> <i class='fa-solid fa-pen-to-square'></i> </button>" +
                                 "<button type='button' class='btn btn-danger m-1' onclick='Delete(" + JSON.stringify(row) + ")'> <i class='fa-solid fa-trash'></i> </button>";
+                        }
+                    },
+                    {
+                        data: 'Estado', render: function (data, type, row, meta) {
+                            var obj = row;
+                            if (row.Estado == 1)
+                                return "<div class='form-check form-switch'><input class='form-check-input' checked onclick='changeState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto +"'>Activo</label></div>";
+                            else
+                                return "<div class='form-check form-switch'><input class='form-check-input' onclick='changeState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto +"'>Activo</label></div>";
                         }
                     },
                     {
@@ -210,10 +222,7 @@
                 language: {
                     "url": "Scripts/SpanishDatatable.json"
                 }
-            });
-
-
-
+            }); 
 
         });
 
@@ -234,11 +243,11 @@
             $('#txtPName').val(model.Nombre);
             $('#txtPDetails').val(model.Descripcion);
             $('#txtPPrice').val(model.Precio); 
-            loadURLToInputFiled("https://" + window.location.host + model.Imagen);
+            loadURLToInputFiled(model.Imagen);
             $('#ModalLabel').empty();
             $('#ModalLabel').append('Editar Producto');
             $('#Modal').modal('show');
-            $('#btnsave').attr('onclick', 'SaveEdit(' + model.PkIdProducto + ', "' + model.Imagen +'")'); 
+            $('#btnsave').attr('onclick', 'SaveEdit(' + model.PkIdProducto + ', "' + model.Imagen + '", ' + model.Estado +')');
         }
 
         function SaveNew() {
@@ -250,6 +259,7 @@
                 obj.Nombre = $('#txtPName').val().trim();
                 obj.Descripcion = $('#txtPDetails').val().trim();
                 obj.Precio = $('#txtPPrice').val().trim();
+                obj.Estado = 1;
 
                 if (fileuploader.files && fileuploader.files[0]) {
                     var reader = new FileReader();
@@ -319,7 +329,7 @@
             }
         }
 
-        function SaveEdit(id, img) {
+        function SaveEdit(id, img, state) {
             if ($('.selectpicker').val().trim().length > 0 && $('#txtPName').val().trim().length > 0 &&
                 $('#txtPDetails').val().trim().length > 0 && $('#txtPPrice').val().trim().length > 0) {
                   
@@ -329,7 +339,8 @@
                 obj.Nombre = $('#txtPName').val().trim();
                 obj.Descripcion = $('#txtPDetails').val().trim();
                 obj.Precio = $('#txtPPrice').val().trim();
-                 
+                obj.Estado = state;
+
                 if (fileuploader.files && fileuploader.files[0]) {
                     var reader = new FileReader();
                     var sender = {};
@@ -418,8 +429,8 @@
                                 table.ajax.reload();
                             } else {
                                 Swal.fire(
-                                    'No se puede eliminar este registro!',
-                                    'La sucursal contiene vendedores...',
+                                    'No se puede eliminar este registro',
+                                    'El producto contiene dependencias...',
                                     'warning'
                                 );
                             }
@@ -432,6 +443,56 @@
 
                 }
             })
+        }
+
+        $('.number').keypress(function (event) {
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+
+        function changeState(model) { 
+            var obj = {};
+            obj.PkIdProducto = model.PkIdProducto;
+            obj.FkIdCategoria = model.FkIdCategoria;
+            obj.Nombre = model.Nombre;
+            obj.Descripcion = model.Descripcion;
+            obj.Precio = model.Precio;
+            obj.Imagen = model.Imagen;
+            obj.Estado = model.Estado;
+
+            console.log(obj);
+            if (obj.Estado == 1) obj.Estado = 0; else obj.Estado = 1;
+            console.log(obj);
+            $.ajax({
+                type: "POST",
+                url: "/Products.aspx/editProducts",
+                data: JSON.stringify(obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg);
+                    console.log(obj);
+                    if (msg.d['result'] == true) {
+                        table.ajax.reload(); 
+                    }
+                    else {
+                        Swal.fire(
+                            'Alerta',
+                            'hubo un error al cambiar el estado del producto',
+                            'warning'
+                        );
+                    }
+                },
+                error: function (msg) {
+                    Swal.fire(
+                        'No se puede guardar este registro',
+                        '',
+                        'warning'
+                    );
+                }
+            });
+             
         }
     </script>
 

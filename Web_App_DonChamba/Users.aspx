@@ -25,9 +25,17 @@
                         </select>
                         <small>Selecciona la sucursal del vendedor </small>
                     </div>
-                 
 
-                
+                    <div class="form-group">
+                        <label for="txtUName">Tipo de usuario*: </label>
+                        <select class="selectpicker show-tick form-control mw-100 border" id="txtNivel"
+                            data-size="5" title="Seleccione nivel de acceso..." data-live-search="true">
+                            <option value="0"> ADMINISTRADOR </option>
+                            <option value="1"> VENDEDOR </option>
+                        </select>
+                        <small>Selecciona el tipo de usuario </small>
+                    </div> 
+
                     <div class="form-group">
                         <label for="txtUName">Nombre*: </label>
                         <input class="form-control mw-100" name="txtUName" id="txtUName" type="text"   />
@@ -45,7 +53,7 @@
                     <div class="form-group">
                         <label for="txtUPhone">Tel&eacutefono*: </label>
                         <input class="form-control mw-100" name="txtUPhone" id="txtUPhone" type="text"   />
-                        <small>Introduce tel&eacutefon del vendedor</small>
+                        <small>Introduce tel&eacutefono del vendedor</small>
                     </div>
                
 
@@ -79,12 +87,13 @@
         </div>
     </div>
 
-    <div class=" table-responsive">
-        <table class="bg-snow border shadow mt-3 overflow-auto display" id="table_id">
+    <div class=" table table-responsive">
+        <table class="table table-striped dt-responsive  bg-snow border shadow mt-3 overflow-auto display nowrap"   id="table_id">
             <thead>
                 <tr>
                     <th>Acciones</th>
                     <th>Sucursal</th>
+                    <th>Nivel de Acceso</th>
                     <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Celular</th>
@@ -157,6 +166,15 @@
                             return "<p>" + companyName +"</p>";
                         }
                     },
+                    {
+                        data: 'Nivel', render: function (data, type, row, meta) {
+                            var obj = row;
+                            if (row.Nivel == 0)
+                                return "<p> ADMINISTRADOR </p>";
+                            else
+                                return "<p> VENDEDOR </p>";
+                        }
+                    },
                     { data: 'Usuario1' },
                     { data: 'Nombres' },
                     { data: 'Celular' },
@@ -181,6 +199,7 @@
             $('#txtUPhone').val('');
             $('#txtUserName').val('');
             $('#txtUserpass').val('');
+            $('#txtNivel').val(1);
             $('#ModalLabel').empty();
             $('#ModalLabel').append('Nuevo vendedor');
             $('#Modal').modal('show');
@@ -188,9 +207,10 @@
 
         }
 
-        function Edit(model) {
+        function Edit(model) { 
             $('.selectpicker').val(model.FkIdSucursal); 
-            $('.selectpicker').selectpicker('refresh'); 
+            $('.selectpicker').selectpicker('refresh');
+            $('#txtNivel').val(model.Nivel);
             $('#txtUName').val(model.Nombres);
             $('#txtULastname').val(model.Apellidos);
             $('#txtUPhone').val(model.Telefono);
@@ -216,6 +236,8 @@
                 obj.Telefono = $('#txtUCPhone').val().trim();
                 obj.Usuario = $('#txtUserName').val().trim();
                 obj.Contrasena = $('#txtUserpass').val().trim();
+                obj.Nivel = $('#txtNivel').val().trim();
+                 
                 console.log(obj);
                 $.ajax({
                     type: "POST",
@@ -267,6 +289,7 @@
                 obj.Telefono = $('#txtUCPhone').val().trim();
                 obj.Usuario = $('#txtUserName').val().trim();
                 obj.Contrasena = $('#txtUserpass').val().trim();
+                obj.Nivel = $('#txtNivel').val().trim();
                 console.log(obj);
                 $.ajax({
                     type: "POST",

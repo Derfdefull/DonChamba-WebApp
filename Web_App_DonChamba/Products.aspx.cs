@@ -70,30 +70,30 @@ namespace Web_App_DonChamba
         }
 
         [WebMethod]
-        public static object saveProducts(string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Precio)
+        public static object saveProducts(string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Precio, string Estado)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
                 new
                 {
                     result = apiHelper.saveAsync("Productoes",
-                new Producto()
-                {
-                    PkIdProducto = 0,
-                    FkIdCategoria = int.Parse(FkIdCategoria),
-                    Nombre = Nombre,
-                    Descripcion = Descripcion,
-                    Imagen = Imagen,
-                    Precio = decimal.Parse(Precio) 
-
-                })
+                    new Producto()
+                    {
+                        PkIdProducto = 0,
+                        FkIdCategoria = int.Parse(FkIdCategoria),
+                        Nombre = Nombre,
+                        Descripcion = Descripcion,
+                        Imagen = Imagen,
+                        Precio = decimal.Parse(Precio),
+                        Estado = int.Parse(Estado) 
+                    })
                 };
 
             return json;
         }
 
         [WebMethod]
-        public static object editProducts(string PkIdProducto, string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Precio)
+        public static object editProducts(string PkIdProducto, string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Estado, string Precio)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
@@ -105,6 +105,7 @@ namespace Web_App_DonChamba
                       PkIdProducto = int.Parse(PkIdProducto),
                       FkIdCategoria = int.Parse(FkIdCategoria),
                       Nombre = Nombre,
+                      Estado = int.Parse(Estado),
                       Descripcion = Descripcion,
                       Imagen = Imagen,
                       Precio = decimal.Parse(Precio)

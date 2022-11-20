@@ -34,30 +34,32 @@ namespace Web_App_DonChamba
         }
 
         [WebMethod]
-        public static object saveUsers(string FkIdSucursal, string Nombres, string Apellidos, string Celular, string Telefono, string Usuario, string Contrasena)
+        public static object saveUsers(string FkIdSucursal, string Nombres, string Apellidos, string Celular, string Telefono, string Usuario, string Contrasena, string Nivel)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
                 new
                 {
                     result = apiHelper.saveAsync("Usuarios",
-                new Usuario()
-                {
-                    PkIdUsuario = 0,
-                    FkIdSucursal = int.Parse(FkIdSucursal),
-                    Nombres = Nombres,
-                    Apellidos = Apellidos,
-                    Celular = Celular,
-                    Telefono = Telefono,
-                    Usuario1 = Usuario,
-                    Contrasena = Contrasena
-                })};
+                    new Usuario()
+                    {
+                        PkIdUsuario = 0,
+                        FkIdSucursal = int.Parse(FkIdSucursal),
+                        Nombres = Nombres,
+                        Apellidos = Apellidos,
+                        Celular = Celular,
+                        Telefono = Telefono,
+                        Usuario1 = Usuario,
+                        Contrasena = Contrasena,
+                        Nivel = int.Parse(Nivel)
+                    })
+                };
 
             return json;
         }
 
         [WebMethod]
-        public static object editUsers(string PkIdUsuario, string FkIdSucursal, string Nombres, string Apellidos, string Celular, string Telefono, string Usuario,string Contrasena)
+        public static object editUsers(string PkIdUsuario, string FkIdSucursal, string Nombres, string Apellidos, string Celular, string Telefono, string Usuario,string Contrasena, string Nivel)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
@@ -73,7 +75,8 @@ namespace Web_App_DonChamba
                       Celular = Celular,
                       Telefono = Telefono,
                       Usuario1 = Usuario,
-                      Contrasena = Contrasena
+                      Contrasena = Contrasena,
+                      Nivel = int.Parse(Nivel)
                   }
                   , PkIdUsuario)
                 };
