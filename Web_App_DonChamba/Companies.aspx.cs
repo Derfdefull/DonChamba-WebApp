@@ -34,21 +34,21 @@ namespace Web_App_DonChamba
         }
 
         [WebMethod]
-        public static object saveCompanies(string Nombre, string Direccion, string Telefono)
+        public static object saveCompanies(string Nombre, string Direccion, string Telefono, decimal Comision)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
                 new
                 {
                     result = apiHelper.saveAsync("Sucursales",
-                new Sucursal() { PkIdSucursal = 0, Nombre = Nombre, Direccion= Direccion, Telefono = Telefono})
+                new Sucursal() { PkIdSucursal = 0, Nombre = Nombre, Direccion= Direccion, Telefono = Telefono, Comision = Comision})
                 };
 
             return json;
         }
 
         [WebMethod]
-        public static object editCompanies(string PkIdSucursal, string Nombre, string Direccion, string Telefono)
+        public static object editCompanies(string PkIdSucursal, string Nombre, string Direccion, string Telefono, decimal Comision)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
@@ -56,7 +56,7 @@ namespace Web_App_DonChamba
                 {
                     result = apiHelper.editAsync("Sucursales",
                   new Sucursal() { PkIdSucursal = int.Parse(PkIdSucursal), Nombre = Nombre, 
-                                    Direccion = Direccion, Telefono = Telefono  }
+                                    Direccion = Direccion, Telefono = Telefono, Comision = Comision  }
                   , PkIdSucursal)
                 };
 

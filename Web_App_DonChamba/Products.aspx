@@ -62,7 +62,13 @@
                         <input class="form-control mw-100 number" name="txtPPrice" id="txtPPrice" type="text" />
                         <small>Introduce precio del producto</small>
                     
-                </div>
+                    </div>
+
+                     <div class="form-group">
+                        <label for="txtUName">Promoci&oacuten*: </label>
+                        <input class="form-control mw-100 number" name="txtPromoPrice" id="txtPromoPrice" type="text" />
+                        <small>Introduce precio cuando est&eacute en promocion</small>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -79,6 +85,7 @@
                 <tr>
                     <th>Acciones</th>
                     <th>Estado</th>
+                    <th>Promoci&oacuten</th>
                     <th>Categoria</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
@@ -184,10 +191,19 @@
                     {
                         data: 'Estado', render: function (data, type, row, meta) {
                             var obj = row;
-                            if (row.Estado == 1)
-                                return "<div class='form-check form-switch'><input class='form-check-input' checked onclick='changeState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto +"'>Activo</label></div>";
+                            if (row.Estado >= 1)
+                                return "<div class='form-check form-switch'><input class='form-check-input' checked onclick='changeState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto + "'>Activo</label></div>";
                             else
-                                return "<div class='form-check form-switch'><input class='form-check-input' onclick='changeState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto +"'>Activo</label></div>";
+                                return "<div class='form-check form-switch'><input class='form-check-input' onclick='changeState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto + "'>Activo</label></div>";
+                        }
+                    },
+                    {
+                        data: 'Estado', render: function (data, type, row, meta) {
+                            var obj = row;
+                            if (row.Estado == 2)
+                                return "<div class='form-check form-switch'><input class='form-check-input' checked onclick='promoState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto + "'>En promoci&oacuten</label></div>";
+                            else
+                                return "<div class='form-check form-switch'><input class='form-check-input' onclick='promoState(" + JSON.stringify(row) + ")' type='checkbox'   id='PState" + row.PkIdProducto + "'> <label class='form-check-label' for='PState" + row.PkIdProducto + "'>En promoci&oacuten </label></div>";
                         }
                     },
                     {
@@ -214,7 +230,10 @@
                     { data: 'Descripcion' },
                     {
                         data: 'Precio', render: function (data, type, row, meta) {
-                            return '$' + parseFloat(row.Precio).toFixed(2);
+                            if(row.Estado == 2)
+                                return '$' + parseFloat(row.Promocion).toFixed(2);
+                            else
+                                return '$' + parseFloat(row.Precio).toFixed(2);
                         }
                     }
                 ]
@@ -229,7 +248,8 @@
         function New() {
             $('#txtPName').val('');
             $('#txtPDetails').val('');
-            $('#txtPPrice').val(''); 
+            $('#txtPPrice').val('');
+            $('#txtPromoPrice').val('');
             $('#ModalLabel').empty();
             $('#ModalLabel').append('Nuevo producto');
             $('#Modal').modal('show');
@@ -243,6 +263,7 @@
             $('#txtPName').val(model.Nombre);
             $('#txtPDetails').val(model.Descripcion);
             $('#txtPPrice').val(model.Precio); 
+            $('#txtPromoPrice').val(model.Promocion); 
             loadURLToInputFiled(model.Imagen);
             $('#ModalLabel').empty();
             $('#ModalLabel').append('Editar Producto');
@@ -252,13 +273,15 @@
 
         function SaveNew() {
             if ($('.selectpicker').val().trim().length > 0 && $('#txtPName').val().trim().length > 0 &&
-                $('#txtPDetails').val().trim().length > 0 && $('#txtPPrice').val().trim().length > 0) {
-
+                $('#txtPDetails').val().trim().length > 0 && $('#txtPPrice').val().trim().length > 0
+                && $('#txtPromoPrice').val().trim().length > 0) {
+                
                 var obj = {};
                 obj.FkIdCategoria = $('.selectpicker').val().trim();
                 obj.Nombre = $('#txtPName').val().trim();
                 obj.Descripcion = $('#txtPDetails').val().trim();
                 obj.Precio = $('#txtPPrice').val().trim();
+                obj.Promocion = $('#txtPromoPrice').val().trim();
                 obj.Estado = 1;
 
                 if (fileuploader.files && fileuploader.files[0]) {
@@ -331,7 +354,7 @@
 
         function SaveEdit(id, img, state) {
             if ($('.selectpicker').val().trim().length > 0 && $('#txtPName').val().trim().length > 0 &&
-                $('#txtPDetails').val().trim().length > 0 && $('#txtPPrice').val().trim().length > 0) {
+                $('#txtPDetails').val().trim().length > 0 && $('#txtPPrice').val().trim().length > 0 && $('#txtPromoPrice').val().trim().length > 0) {
                   
                 var obj = {};
                 obj.PkIdProducto = id;
@@ -339,6 +362,8 @@
                 obj.Nombre = $('#txtPName').val().trim();
                 obj.Descripcion = $('#txtPDetails').val().trim();
                 obj.Precio = $('#txtPPrice').val().trim();
+                obj.Precio = $('#txtPromoPrice').val().trim();
+                obj.Promocion = $('#txtPromoPrice').val().trim();
                 obj.Estado = state;
 
                 if (fileuploader.files && fileuploader.files[0]) {
@@ -458,12 +483,12 @@
             obj.Nombre = model.Nombre;
             obj.Descripcion = model.Descripcion;
             obj.Precio = model.Precio;
+            obj.Promocion = model.Promocion;
             obj.Imagen = model.Imagen;
             obj.Estado = model.Estado;
 
             console.log(obj);
-            if (obj.Estado == 1) obj.Estado = 0; else obj.Estado = 1;
-            console.log(obj);
+            if (obj.Estado == 1 || obj.Estado == 2 ) obj.Estado = 0; else obj.Estado = 1;
             $.ajax({
                 type: "POST",
                 url: "/Products.aspx/editProducts",
@@ -493,6 +518,52 @@
                 }
             });
              
+        }
+
+        function promoState(model) {
+            var obj = {};
+            obj.PkIdProducto = model.PkIdProducto;
+            obj.FkIdCategoria = model.FkIdCategoria;
+            obj.Nombre = model.Nombre;
+            obj.Descripcion = model.Descripcion;
+            obj.Precio = model.Precio;
+            obj.Promocion = model.Promocion;
+            obj.Imagen = model.Imagen;
+            obj.Estado = model.Estado;
+
+            console.log(obj);
+
+            if (obj.Estado == 1 || obj.Estado == 0 ) obj.Estado = 2; else obj.Estado = 1;
+            console.log(obj);
+            $.ajax({
+                type: "POST",
+                url: "/Products.aspx/editProducts",
+                data: JSON.stringify(obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg);
+                    console.log(obj);
+                    if (msg.d['result'] == true) {
+                        table.ajax.reload();
+                    }
+                    else {
+                        Swal.fire(
+                            'Alerta',
+                            'hubo un error al cambiar el estado del producto',
+                            'warning'
+                        );
+                    }
+                },
+                error: function (msg) {
+                    Swal.fire(
+                        'No se puede guardar este registro',
+                        '',
+                        'warning'
+                    );
+                }
+            });
+
         }
     </script>
 

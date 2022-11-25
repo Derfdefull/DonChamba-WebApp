@@ -70,7 +70,7 @@ namespace Web_App_DonChamba
         }
 
         [WebMethod]
-        public static object saveProducts(string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Precio, string Estado)
+        public static object saveProducts(string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Precio, string Estado, string Promocion)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
@@ -85,6 +85,7 @@ namespace Web_App_DonChamba
                         Descripcion = Descripcion,
                         Imagen = Imagen,
                         Precio = decimal.Parse(Precio),
+                        Promocion = decimal.Parse(Promocion),
                         Estado = int.Parse(Estado) 
                     })
                 };
@@ -93,7 +94,7 @@ namespace Web_App_DonChamba
         }
 
         [WebMethod]
-        public static object editProducts(string PkIdProducto, string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Estado, string Precio)
+        public static object editProducts(string PkIdProducto, string FkIdCategoria, string Nombre, string Descripcion, string Imagen, string Estado, string Precio, string Promocion)
         {
             APIHelper apiHelper = new APIHelper();
             object json =
@@ -108,7 +109,8 @@ namespace Web_App_DonChamba
                       Estado = int.Parse(Estado),
                       Descripcion = Descripcion,
                       Imagen = Imagen,
-                      Precio = decimal.Parse(Precio)
+                      Precio = decimal.Parse(Precio),
+                      Promocion = decimal.Parse(Promocion)
                   }
                   , PkIdProducto)
                 };

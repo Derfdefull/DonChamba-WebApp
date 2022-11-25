@@ -15,7 +15,7 @@ namespace WebAPIDonChamba.Models
         public string Comentario { get; set; }
         public byte Estado { get; set; }
         public decimal Total { get; set; }
+        public decimal Comision { get; set; }
 
-      
     }
 }

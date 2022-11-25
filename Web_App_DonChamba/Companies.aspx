@@ -22,7 +22,11 @@
                         <small>Introduce el nombre de sucursal</small>
                     </div>
               
-
+                    <div class="form-group">
+                        <label for="txtCategory">Comisi&oacuten*: </label>
+                        <input class="form-control mw-100 number" name="txtComision" id="txtComision" type="text"  />
+                        <small>Introduce la comision por sucursal</small>
+                    </div>
                 
                     <div class="form-group">
                         <label for="txtCategory">Tel&eacutefono*: </label>
@@ -54,6 +58,7 @@
                 <tr>
                     <th>Acciones</th>
                     <th>C&oacutedigo</th>
+                    <th>Comisi&oacuten</th>
                     <th>Nombre</th>
                     <th>Direcci&oacuten</th>
                     <th>Tel&eacutefono</th>
@@ -86,6 +91,10 @@
                           }
                       },
                       { data: 'PkIdSucursal' },
+                      {
+                          data: 'Comision', render: function (data, type, row, meta) {
+                              return row.Comision + '%';
+                          } },
                       { data: 'Nombre' },
                       { data: 'Direccion' },
                       { data: 'Telefono' }
@@ -105,6 +114,7 @@
               $('#txtCompany').val('');
               $('#txtCAddress').val('');
               $('#txtCPhone').val('');
+              $('#txtComision').val('');
               $('#ModalLabel').empty();
               $('#ModalLabel').append('Nueva sucursal');
               $('#Modal').modal('show');
@@ -116,6 +126,7 @@
               $('#txtCompany').val(model.Nombre);
               $('#txtCAddress').val(model.Direccion);
               $('#txtCPhone').val(model.Telefono);
+              $('#txtComision').val(model.Comision);
               $('#ModalLabel').empty();
               $('#ModalLabel').append('Editar sucursal');
               $('#Modal').modal('show');
@@ -126,11 +137,12 @@
           function SaveNew() {
               if ($('#txtCompany').val().trim().length > 0 &&
                   $('#txtCAddress').val().trim().length > 0 &&
-                  $('#txtCPhone').val().trim().length > 0  ) {
+                  $('#txtCPhone').val().trim().length > 0 && $('#txtComision').val().trim().length > 0  ) {
                   var obj = {};
                   obj.Nombre = $('#txtCompany').val().trim();
                   obj.Direccion = $('#txtCAddress').val().trim();
-                  obj.Telefono = $('#txtCPhone').val().trim(); 
+                  obj.Telefono = $('#txtCPhone').val().trim();
+                  obj.Comision = $('#txtComision').val().trim();
                   $.ajax({
                       type: "POST",
                       url: "/Companies.aspx/saveCompanies",
@@ -173,12 +185,14 @@
           function SaveEdit(id) {
               if ($('#txtCompany').val().trim().length > 0 &&
                   $('#txtCAddress').val().trim().length > 0 &&
-                  $('#txtCPhone').val().trim().length > 0 ) {
+                  $('#txtCPhone').val().trim().length > 0 &&
+                  $('#txtComision').val().trim().length > 0) {
                   var obj = {};
                   obj.PkIdSucursal = id;
                   obj.Nombre = $('#txtCompany').val().trim();
                   obj.Direccion = $('#txtCAddress').val().trim();
                   obj.Telefono = $('#txtCPhone').val().trim();
+                  obj.Comision = $('#txtComision').val().trim();
                   console.log(obj);
                   $.ajax({
                       type: "POST",
@@ -257,6 +271,12 @@
                   }
               })
           }
+
+          $('.number').keypress(function (event) {
+              if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                  event.preventDefault();
+              }
+          });
 
       </script>
 
